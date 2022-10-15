@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        body>div{
+            margin-bottom: 50px;
+        }
+        .goBack,.output{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <label for="route">Выберите направление</label>
+        <select name="route" id="route">
+        </select>
+    </div>
+
+    <div>
+        <label for="time">Выберите время туда</label>
+        <select name="time" id="time">
+        </select>
+    </div>
+
+    <div class="goBack">
+        <label for="time2">Выберите время обратно</label>
+        <select name="time2" id="time2">
+        </select>
+    </div>
+
+    <div class="tickets">
+        <label for="num">Количество билетов</label>
+        <input id="num" type="number">
+        <button>Посчитать</button>
+    </div>
+
+    <p class="output">
+<!--        Вы выбрали <span class="num_tickets">4</span> билета-->
+<!--        по маршруту <span class="route">из A в B</span>-->
+<!--        стоимостью <span class="cost">4000р</span>.-->
+<!--        Это путешествие займет у вас <span class="time">40 минут</span>.-->
+<!--        Теплоход отправляется в <span class="time_start">12-00</span>,-->
+<!--        а прибудет в <span class="time_finish">18-00</span>.-->
+    </p>
+
+
+
+    <script type="module" src="env/const.js"></script>
+    <script type="module" src="env/state.js"></script>
+
+    <script type="module" src="comps/timeSelect.js"></script>
+    <script type="module" src="comps/routeSelect.js"></script>
+    <script type="module" src="comps/tickets.js"></script>
+    <script type="module" src="comps/output.js"></script>
+
+    <script type="module" src="index.js"></script>
+</body>
+</html>

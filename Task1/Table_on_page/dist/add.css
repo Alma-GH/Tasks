@@ -1,0 +1,10 @@
+
+
+@media screen and (max-width: 500px){
+    table{
+        table-layout: fixed
+    }
+    table td{
+        word-wrap: break-word;
+    }
+}

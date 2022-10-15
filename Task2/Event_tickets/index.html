@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        .wrap{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px 200px;
+        }
+        .mini_tables{
+            margin-top: 25px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        table{
+            border-collapse: collapse;
+            align-self: flex-start;
+        }
+        h3{
+            align-self: flex-start;
+        }
+        td, th {
+            padding: 3px;
+            border: 1px solid black;
+        }
+        th {
+            background: #b0e0e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h2>Дано:</h2>
+        <h3>phpMyAdmin</h3>
+        <table>
+            <tbody>
+            <tr>
+                <th>id</th>
+                <th>event_id</th>
+                <th>event_date</th>
+                <th>ticket_adult_price</th>
+                <th>ticket_adult_quantity</th>
+                <th>ticket_kid_price</th>
+                <th>ticket_kid_quantity</th>
+                <th>barcode</th>
+                <th>user_id</th>
+                <th>equal_price</th>
+                <th>created</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>003</td>
+                <td>2021-08-21 13:00:00</td>
+                <td>700</td>
+                <td>1</td>
+                <td>450</td>
+                <td>0</td>
+                <td>11111111</td>
+                <td>00451</td>
+                <td>700</td>
+                <td>2021-01-11 13:22:09</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>006</td>
+                <td>2021-07-29 18:00:00</td>
+                <td>1000</td>
+                <td>0</td>
+                <td>800</td>
+                <td>2</td>
+                <td>22222222</td>
+                <td>00364</td>
+                <td>1600</td>
+                <td>2021-01-12 16:62:08</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>003</td>
+                <td>2021-08-15 17:00:00</td>
+                <td>700</td>
+                <td>4</td>
+                <td>450</td>
+                <td>3</td>
+                <td>33333333</td>
+                <td>00015</td>
+                <td>4150</td>
+                <td>2021-01-13 10:08:45</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>Вопросы:</h2>
+        <p>
+            1)Некоторые события нужно продавать с дополнительными типами билетов - льготный и групповой, у которых будут свои цены и название.
+            Имеется информация, что вероятно, будут другие типы билетов, которые нужно будет добавить.
+            Нужно уметь сохранять при заказе 2 дополнительных типа билета, льготный и групповой в бд.
+            Задача - Показать конечный вид таблицы с добавленными типами билетов. Объяснить свое решение.
+        </p>
+        <p>
+            2)Часто посетители из одного заказа приходят не одновременно на события.
+            Возникает необходимость чекинить их по отдельности. Для этого у каждого билета должен быть свой баркод.
+            Если в одном заказе было куплено несколько билетов,
+            2 взрослых, 3 детских, 4 льготных - то должно быть 9 баркодов для каждого билета соответственно.
+            Задача - Показать конечный вид таблицы, где у каждого билета свой баркод. Объяснить свое решение.
+        </p>
+
+        <h2>Решение 1:</h2>
+        <h3>phpMyAdmin</h3>
+        <table>
+            <tbody>
+            <tr>
+                <th>id</th>
+                <th>event_id</th>
+                <th>event_date</th>
+                <th>barcode</th>
+                <th>user_id</th>
+                <th>equal_price</th>
+                <th>created</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>003</td>
+                <td>2021-08-21 13:00:00</td>
+                <td>11111111</td>
+                <td>00451</td>
+                <td>700</td>
+                <td>2021-01-11 13:22:09</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>006</td>
+                <td>2021-07-29 18:00:00</td>
+                <td>22222222</td>
+                <td>00364</td>
+                <td>1600</td>
+                <td>2021-01-12 16:62:08</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>003</td>
+                <td>2021-08-15 17:00:00</td>
+                <td>33333333</td>
+                <td>00015</td>
+                <td>4150</td>
+                <td>2021-01-13 10:08:45</td>
+            </tr>
+            </tbody>
+        </table>
+        <h3>phpTickets</h3>
+        <table>
+            <tbody>
+            <tr>
+                <th>id_order</th>
+                <th>ticket_adult_price</th>
+                <th>ticket_adult_quantity</th>
+                <th>ticket_kid_price</th>
+                <th>ticket_kid_quantity</th>
+                <th>ticket_group_price</th>
+                <th>ticket_group_quantity</th>
+                <th>ticket_preferential_price</th>
+                <th>ticket_preferential_quantity</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>700</td>
+                <td>1</td>
+                <td>450</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>1000</td>
+                <td>0</td>
+                <td>800</td>
+                <td>2</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>700</td>
+                <td>4</td>
+                <td>450</td>
+                <td>3</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>Объяснение 1:</h2>
+        <p>
+            Мы добавляем новую таблицу phpTickets,
+            чтобы хранить в ней количество и цены билетов, с ключом по номеру заказа.
+            Так как "...вероятно, будут другие типы билетов, которые нужно будет добавить",
+            мы отделяем данные о билетах в отдельную таблицу,
+            в которую можно будет добавлять новые колонки с другими типами билетов.
+            Это помогает не нагружать таблицу phpMyAdmin множеством дополнительных колонок
+        </p>
+
+        <br><br><br><br><br><br>
+
+        <h2>Решение 2:</h2>
+        <h3>phpMyAdmin</h3>
+        <table>
+            <tbody>
+            <tr>
+                <th>id</th>
+                <th>event_id</th>
+                <th>event_date</th>
+                <th>user_id</th>
+                <th>equal_price</th>
+                <th>created</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>003</td>
+                <td>2021-08-21 13:00:00</td>
+                <td>00451</td>
+                <td>700</td>
+                <td>2021-01-11 13:22:09</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>006</td>
+                <td>2021-07-29 18:00:00</td>
+                <td>00364</td>
+                <td>1600</td>
+                <td>2021-01-12 16:62:08</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>003</td>
+                <td>2021-08-15 17:00:00</td>
+                <td>00015</td>
+                <td>4150</td>
+                <td>2021-01-13 10:08:45</td>
+            </tr>
+            </tbody>
+        </table>
+        <h3>phpTickets</h3>
+        <table>
+            <tbody>
+            <tr>
+                <th>id_order</th>
+                <th>ticket_adult_price</th>
+                <th>ticket_adult_quantity</th>
+                <th>ticket_kid_price</th>
+                <th>ticket_kid_quantity</th>
+                <th>ticket_group_price</th>
+                <th>ticket_group_quantity</th>
+                <th>ticket_preferential_price</th>
+                <th>ticket_preferential_quantity</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>700</td>
+                <td>1</td>
+                <td>450</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>1000</td>
+                <td>0</td>
+                <td>800</td>
+                <td>2</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>700</td>
+                <td>4</td>
+                <td>450</td>
+                <td>3</td>
+                <td>-</td>
+                <td>0</td>
+                <td>-</td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mini_tables">
+            <div>
+                <h4>phpAdultTickets</h4>
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>id_order</th>
+                        <th>barcode</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>111111</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333333</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333334</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333335</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333336</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h4>phpKidTickets</h4>
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>id_order</th>
+                        <th>barcode</th>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>222222</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>222223</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333337</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333338</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>333339</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h4>phpGroupTickets</h4>
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>id_order</th>
+                        <th>barcode</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h4>phpPreferentialTickets</h4>
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>id_order</th>
+                        <th>barcode</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <h2>Объяснение 2:</h2>
+        <p>
+            Мы добавляем еще таблицы php(name)Tickets,
+            чтобы хранить в них баркоды, с ключом по номеру заказа.
+            Это помогает идентифицировать каждый билет.
+            Теперь не возникает проблем со множеством билетов.
+            Мы можем просто добавлять(удалять) в соответствующие таблицы баркоды по номеру заказа.
+            При появлении новых типов билетов мы просто создадим новую таблицу.
+            <br>
+            <br>
+            Этот вариант подходит, если нам нужно идентифицировать билеты вместе с их типом.
+            В случае, если это не требуется, то вместо множества таблиц мы создаем одну phpTicketsId,
+            где также храним баркоды по ключу номера заказа.
+        </p>
+    </div>
+</body>
+</html>
